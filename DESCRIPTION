@@ -1,0 +1,19 @@
+Package: reurostat
+Title: REuroStat
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "James",
+           family = "Bain",
+           role = c("cre", "aut"),
+           email = "jamescbain@gmail.com")
+Description: An API wrapper for EuroStat
+License: MIT + file LICENSE
+URL: http://this
+BugReports: http://that
+Imports: 
+    curl,
+    httr,
+    jsonlite,
+    purrr
+Encoding: UTF-8
+LazyData: true
