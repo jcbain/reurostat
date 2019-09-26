@@ -7,8 +7,11 @@ check_internet <- function(){
 }
 
 #' @importFrom httr status_code
-check_status <- function(res){
-  stop_if_not(.x = status_code(res),
+check_status <- function(resp){
+  parsed <- jsonlite::fromJSON(httr::content(resp, "text"), simplifyVector = FALSE)
+  stop_if_not(.x = status_code(resp),
               .p = ~ .x == 200,
-              msg = "The API returned an error")
+              msg = sprintf("eurostat API request failed [%s]\n%s",
+                            status_code(resp),
+                            parsed$error$label))
 }
