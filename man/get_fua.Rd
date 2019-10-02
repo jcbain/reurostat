@@ -35,7 +35,7 @@ belongs to.
 \dontrun{
 library(reurostat)
 
-brus_antw <- get_fua(dataset = "urb_lpop1", cities = c("BE002L2", "BE001L2")
+brus_antw <- get_fua(dataset = "urb_lpop1", cities = c("BE002L2", "BE001L2"))
 }
 }
 \seealso{
