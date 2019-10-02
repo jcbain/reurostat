@@ -59,6 +59,20 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
   }) %>%
     purrr::reduce(c)
 
+  # flags <- purrr::map(c(0:(n_rows - 1)), function(x){
+  #     extrac_flags <- stringr::str_extract_all(null_data[[as.character(x)]], "[:alpha:]")
+  #
+  #   if (is_empty(null_data[[as.character(x)]])){
+  #     v <- NA
+  #   } else if(identical(extrac_flags, character(0))){
+  #     v <- NA
+  #   } else {
+  #     v <- stringr::str_c(extrac_flags[[1]], collapse = "")
+  #   }
+  #   v
+  # }) %>%
+  #   purrr::reduce(c)
+
   dplyr::tibble(
     fua_code = rep(purrr::map(names(fua_code), function(x){
       rep(x, num_years)
@@ -71,6 +85,7 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
     year = rep(purrr::map_int(names(year), function(x){as.integer(year[[x]])}),
                num_codes * num_cities),
     value = as.numeric(value),
+    # flag = flags,
     code = purrr::map(names(category),function(x){
       rep(x, num_years * num_cities)}
     ) %>%
@@ -81,5 +96,6 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
       purrr::reduce(c)
   )
 }
+
 
 
