@@ -23,7 +23,7 @@
 #' @examples \dontrun{
 #' library(reurostat)
 #'
-#' brus_antw <- get_fua(dataset = "urb_lpop1", cities = c("BE002L2", "BE001L2")
+#' brus_antw <- get_fua(dataset = "urb_lpop1", cities = c("BE002L2", "BE001L2"))
 #' }
 get_fua <- function(dataset, cities, language = "en", props = FALSE){
   args <- purrr::map(cities, function(x){x}) %>%
@@ -47,15 +47,19 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
   num_codes <- rjson$size[1]
   num_cities <- rjson$size[2]
   num_years <- rjson$size[3]
+  n_rows <- num_codes * num_cities * num_years
 
-  value <- purrr::map_chr(as.character(sort(as.integer(c(names(data),
-                                                         names(null_data))))),
-                          function(x){
-                            c(data, null_data)[[x]]
-                          })
-  value[value == ":"] <- NA
+  value <- purrr::map(c(0:(n_rows - 1)), function(x){
+    if (is_empty(data[[as.character(x)]])){
+      v <- NA
+    } else {
+      v <- data[[as.character(x)]]
+    }
+    v
+  }) %>%
+    purrr::reduce(c)
 
-  tibble(
+  dplyr::tibble(
     fua_code = rep(purrr::map(names(fua_code), function(x){
       rep(x, num_years)
     }) %>%
@@ -77,3 +81,5 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
       purrr::reduce(c)
   )
 }
+
+
