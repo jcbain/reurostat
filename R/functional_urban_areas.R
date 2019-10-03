@@ -50,7 +50,7 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
   n_rows <- num_codes * num_cities * num_years
 
   value <- purrr::map(c(0:(n_rows - 1)), function(x){
-    if (is_empty(data[[as.character(x)]])){
+    if (rlang::is_empty(data[[as.character(x)]])){
       v <- NA
     } else {
       v <- data[[as.character(x)]]
@@ -62,7 +62,7 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
   flags <- purrr::map(c(0:(n_rows - 1)), function(x){
       extrac_flags <- stringr::str_extract_all(null_data[[as.character(x)]], "[:alpha:]")
 
-    if (is_empty(null_data[[as.character(x)]])){
+    if (rlang::is_empty(null_data[[as.character(x)]])){
       v <- NA
     } else if(identical(extrac_flags[[1]], character(0))){
       v <- NA
