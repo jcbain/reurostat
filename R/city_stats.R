@@ -1,12 +1,11 @@
-#' Download Functional Urban Areas datasets.
+#' Download City Statistics datasets.
 #'
 #' Description from eurostat (see link for reference).
 #' The Functional Urban Area consists of a city and its commuting zone. (This
 #' was formerly known as larger urban zone (LUZ)).
 #'
-#' Download data pertaining to Functional Urban Areas from eurostat. Cities
-#' here refers to the major ubran area in which the Functional Urban Area
-#' belongs to.
+#' Download data pertaining to Functional Urban Areas, cities and greater cities
+#' from eurostat.
 #'
 #' @importFrom magrittr "%>%"
 #'
@@ -16,16 +15,16 @@
 #' @param language The language of the data.
 #' @param props An option to include proportional data along with absolute
 #'   values.
-#' @return A tibble of with the attributes `fua_code`, `fua`, `year`, `value`,
-#'   `code` and `variable`.
+#' @return A tibble of with the attributes `urb_code`, `city`, `year`, `value`,
+#'   `var_code` and `variable`.
 #' @seealso \url{https://ec.europa.eu/eurostat/web/cities/spatial-units}
 #' @export
 #' @examples \dontrun{
 #' library(reurostat)
 #'
-#' brus_antw <- get_fua(dataset = "urb_lpop1", cities = c("BE002L2", "BE001L2"))
+#' brus_antw <- get_city_stat(dataset = "urb_lpop1", cities = c("BE002L2", "BE001L2"))
 #' }
-get_fua <- function(dataset, cities, language = "en", props = FALSE){
+get_city_stats <- function(dataset, cities, language = "en", props = FALSE){
   args <- purrr::map(cities, function(x){x}) %>%
     stats::setNames(rep("cities", length(cities)))
 
@@ -74,11 +73,11 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
     purrr::reduce(c)
 
   dplyr::tibble(
-    fua_code = rep(purrr::map(names(fua_code), function(x){
+    urb_code = rep(purrr::map(names(fua_code), function(x){
       rep(x, num_years)
     }) %>%
       purrr::reduce(c), num_codes),
-    fua = rep(purrr::map(fua, function(x){
+    city = rep(purrr::map(fua, function(x){
       rep(x, num_years)
     }) %>%
       purrr::reduce(c), num_codes),
@@ -86,7 +85,7 @@ get_fua <- function(dataset, cities, language = "en", props = FALSE){
                num_codes * num_cities),
     value = as.numeric(value),
     flag = flags,
-    code = purrr::map(names(category),function(x){
+    var_code = purrr::map(names(category),function(x){
       rep(x, num_years * num_cities)}
     ) %>%
       purrr::reduce(c),
